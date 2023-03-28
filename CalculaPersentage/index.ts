@@ -1,6 +1,6 @@
 import {IInputs, IOutputs} from "./generated/ManifestTypes";
 
-export class CalculaPersentage
+export class CalculaPersentageUpdate
   implements ComponentFramework.StandardControl<IInputs, IOutputs>
 {
   /**
@@ -14,7 +14,7 @@ export class CalculaPersentage
   private precisionData: number;
   private result: number;
   private formattedNumber: number;
-  private calPercentageResultVal:number;
+  private calPercentageResultVal: number;
   constructor() {}
 
   /**
@@ -79,7 +79,7 @@ export class CalculaPersentage
    */
   public getOutputs(): IOutputs {
     return {
-      finalResult: this.calPercentageResultVal
+      finalResult: this.calPercentageResultVal,
     };
   }
 
