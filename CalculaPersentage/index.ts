@@ -11,8 +11,10 @@ export class CalculaPersentage
   private PercentageData: number;
   private outPutResult: number;
   private _notifyOutputChanged: () => void;
-  private precisionData:number;
-  private result:number;
+  private precisionData: number;
+  private result: number;
+  private formattedNumber: number;
+  private calPercentageResultVal:number;
   constructor() {}
 
   /**
@@ -35,9 +37,7 @@ export class CalculaPersentage
     // this.NumberData = context.parameters.numberValue.raw!;
     // this.PercentageData = context.parameters.percentageValue.raw!;
     //this.precisionData=Number.parseInt(context.parameters.precisionValue.raw)
-   //alert(this.precisionData);
-
-
+    //alert(this.precisionData);
   }
 
   /**
@@ -45,17 +45,32 @@ export class CalculaPersentage
    * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
    */
   public updateView(context: ComponentFramework.Context<IInputs>): void {
-  
-//this.outPutResult = Number.parseInt(((this.PercentageData / this.NumberData) *100).toPrecision(this.precisionData));
-this.NumberData = context.parameters.numberValue.raw!;
-this.PercentageData = context.parameters.percentageValue.raw!;
-this.precisionData = Number.parseInt(context.parameters.precisionValue.raw!);
-//this.result = Number.parseFloat(((this.PercentageData * this.NumberData) / 100).toPrecision(this.PercentageData));
-//this._notifyOutputChanged();
- this.outPutResult =(this.PercentageData * this.NumberData) /100;
-this.result = Number.parseFloat(this.outPutResult.toFixed(this.precisionData));
-this._notifyOutputChanged();
+    //this.outPutResult = Number.parseInt(((this.PercentageData / this.NumberData) *100).toPrecision(this.precisionData));
+    this.NumberData = context.parameters.numberValue.raw!;
+    this.PercentageData = context.parameters.percentageValue.raw!;
+    this.precisionData = Number.parseInt(
+      context.parameters.precisionValue.raw!
+    );
+    //this.result = Number.parseFloat(((this.PercentageData * this.NumberData) / 100).toPrecision(this.PercentageData));
+    //this._notifyOutputChanged();
+    this.outPutResult = (this.PercentageData * this.NumberData) / 100;
+    // this.result = Number.parseFloat(
+    //   this.outPutResult.toFixed(this.precisionData)
+    // );
 
+    var addZeros = String(1).padEnd(this.precisionData + 1, "0");
+
+    var hundred = parseInt(addZeros);
+
+    if (this.precisionData == 0) {
+      this.calPercentageResultVal = Math.floor(this.outPutResult);
+    } else {
+      var formattedNumber = Math.floor(this.outPutResult * hundred) / hundred;
+
+      this.calPercentageResultVal = formattedNumber;
+    }
+
+    this._notifyOutputChanged();
   }
 
   /**
@@ -64,7 +79,7 @@ this._notifyOutputChanged();
    */
   public getOutputs(): IOutputs {
     return {
-      finalResult: this.result
+      finalResult: this.calPercentageResultVal
     };
   }
 
